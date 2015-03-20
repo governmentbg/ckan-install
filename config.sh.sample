@@ -1,33 +1,44 @@
 #!/usr/bin/env bash
-CKAN_INSTANCE_NICKNAME=opendatabulgaria
-CKAN_URL=http://opendata.government.bg
+# for the nickname, you can only use lowercase latin letters and underscores
+CKAN_CONFIG_FILENAME="production.ini"
+CKAN_CONFIG_DIR=/etc/ckan/default
+VIRTUALENV_DIR=/usr/lib/ckan/default
+UPLOADS_DIR=/var/lib/ckan/default
+OWNER_USER=www-data
+OWNER_GROUP=www-data
+
+CKAN_INSTANCE_NAME=opendatabulgaria
+CKAN_DOMAIN=opendata.government.bg
+CKAN_URL=https://opendata.government.bg
 CKAN_TITLE="Open data portal"
+
 LOCALE=en
 LOCALES_ORDER="en pt_BR ja it cs_CZ ca es fr el sv sr sr@latin no sk fi ru de pl nl bg ko_KR hu sa sl lv"
+
 FAVICON_RELATIVE_URL=/images/icons/ckan.ico
+
+CKAN_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg.git@data.obshtestvo.bg
+
 CKAN_THEME_NAME=obshtestvo_theme
 CKAN_THEME_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg-theme.git@master
-VIRTUALENV_DIR=/usr/lib/ckan/default
-# Not implemented. Should we have separate venv for datapusher at all?
-#VIRTUALENV_DATAPUSHER_DIR=/usr/lib/ckan/default
-CKAN_DIR_SYMLINK=/root/ckan
-CKAN_LIB_DIR=/usr/lib/ckan
-CKAN_ETC_DIR=/etc/ckan
-CKAN_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg.git@data.obshtestvo.bg
+
 POSTGRES_NEW_USER=ckan_default
 POSTGRES_NEW_READONLY_USER=datastore_default
 POSTGRES_PASS=secretpassword
 POSTGRES_DBNAME=ckan_default
 POSTGRES_DATASTORE_DBNAME=datastore_default
-OWNER_USER=www-data
-OWNER_GROUP=www-data
+
+SOLR_SETUP=manual
 SOLR_URL=http://127.0.0.1:8983/solr
-UPLOADS_DIR=/var/lib/ckan/default
+
 DATAPUSHER_REPO_TAG=https://github.com/ckan/datapusher.git@master
 DATAPUSHER_URL=http://0.0.0.0:8800/
-EMAIL_TO=something@portal.com
+# Not implemented. Should we have separate venv for datapusher at all?
+#VIRTUALENV_DATAPUSHER_DIR=/usr/lib/ckan/default
+
+EMAIL_TO=something@maintainersdomain.com
 SMTP_MAIL_FROM=portal@portal.com
-ERROR_EMAIL_FROM=something@portal.com
+ERROR_EMAIL_FROM=portal@portal.com
 SMTP_HOST=smtphostname.com
 SMTP_TLS=True
 SMTP_USER=smtpusername

@@ -1,3 +1,6 @@
 [submodule "bash-utilities"]
 	path = bash-utilities
 	url = https://github.com/web-napopa/bash-utilities.git
+[submodule "mush"]
+	path = mush
+	url = https://github.com/jwerle/mush.git
