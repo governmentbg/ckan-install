@@ -14,18 +14,10 @@ Setup script provided for debian machines.
 
 ## Usage
 
-1. Download git submodules
-```
-git submodule update --init
-```
-1. Setup config. Start with template:
-```
-cp config.sh.sample config.sh
-```
-1. Run install
-```
-bash debian/init.sh 
-```
+1. Download git submodules `git submodule update --init`
+1. Setup config. Start with template: `cp config.sh.sample config.sh`. Whatever password you set for postgres users
+make sure you type the same in the installation
+1. Run install `bash debian/init.sh`
 
 After install you might want to:
 

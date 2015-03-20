@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# for the nickname, you can only use lowercase latin letters and underscores
 CKAN_CONFIG_FILENAME="production.ini"
 CKAN_CONFIG_DIR=/etc/ckan/default
 VIRTUALENV_DIR=/usr/lib/ckan/default
@@ -7,7 +6,7 @@ UPLOADS_DIR=/var/lib/ckan/default
 OWNER_USER=www-data
 OWNER_GROUP=www-data
 
-CKAN_INSTANCE_NAME=opendatabulgaria
+CKAN_INSTANCE_NAME=opendatabulgaria # only latin lowercase + underscores allowed
 CKAN_DOMAIN=opendata.government.bg
 CKAN_URL=https://opendata.government.bg
 CKAN_TITLE="Open data portal"
