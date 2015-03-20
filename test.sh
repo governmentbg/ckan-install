@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-source config.sh
-source bash-utilities/utils.sh
+TEST_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $TEST_DIR/config.sh
+source $TEST_DIR/bash-utilities/utils.sh
 
 echo "testing datastore..."
 curl -X GET "http://127.0.0.1/api/3/action/datastore_search?resource_id=_table_metadata"
