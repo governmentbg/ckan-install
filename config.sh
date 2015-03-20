@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 CKAN_INSTANCE_NICKNAME=opendatabulgaria
 CKAN_URL=http://opendata.government.bg
+CKAN_TITLE="Open data portal"
+LOCALE=en
+LOCALES_ORDER="en pt_BR ja it cs_CZ ca es fr el sv sr sr@latin no sk fi ru de pl nl bg ko_KR hu sa sl lv"
 CKAN_THEME_NAME=obshtestvo_theme
 CKAN_THEME_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg-theme.git@master
 VIRTUALENV_DIR=/usr/lib/ckan/default
