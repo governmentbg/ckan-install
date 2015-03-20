@@ -4,7 +4,7 @@ This will setup CKAN 2.2 with:
 - datapusher extensions
 - obshtestvo theme extention
 
-Currently, the setup provided script is for **debian machines only**.
+Currently, the provided setup script is for **debian machines only**.
 
 ## Usage
 
