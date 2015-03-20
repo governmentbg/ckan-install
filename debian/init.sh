@@ -156,8 +156,8 @@ cat "$INIT_DIR/../templates/apache_ckan_datapusher.conf" | mush > "/etc/apache2/
 cat "$INIT_DIR/../templates/apache_ckan_datapusher.wsgi" | mush >  "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
 cp "$VIRTUALENV_DIR/src/datapusher/deployment/datapusher_settings.py" "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher_settings.py"
 DATAPUSHER_CONFIG_PATH="$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher_settings.py" # shortcut
-replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "NAME =" --replacement-raw "NAME = ${CKAN_INSTANCE_NAME}_datapusher"
-replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "FROM_EMAIL =" --replacement-raw "FROM_EMAIL = $SMTP_MAIL_FROM"
+replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "NAME =" --replacement-raw "NAME = '${CKAN_INSTANCE_NAME}_datapusher'"
+replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "FROM_EMAIL =" --replacement-raw "FROM_EMAIL = '$SMTP_MAIL_FROM'"
 replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "ADMINS =" --replacement-raw "ADMINS = ['$EMAIL_TO']"
 chmod 644 "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
 chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
