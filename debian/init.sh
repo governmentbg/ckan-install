@@ -57,7 +57,7 @@ deactivate
 su postgres postgres.sh
 
 # alias path to config
-$CONFIG_PATH="$CKAN_CONFIG_DIR/development.ini"
+CONFIG_PATH="$CKAN_CONFIG_DIR/$CKAN_CONFIG_FILENAME"
 
 ## create config file
 paster make-config ckan "$CONFIG_PATH"
@@ -93,24 +93,29 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.server =" --replacem
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.starttls =" --replacement-raw "smtp\.starttls = $SMTP_TLS"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.user =" --replacement-raw "smtp\.user = $SMTP_USER"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.password =" --replacement-raw "smtp\.password = $SMTP_PASS"
+replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.mail_from =" --replacement-raw "smtp\.mail_from = $SMTP_MAIL_FROM"
 
 # Repoze.who configuration file needs to be accessible in the same directory as your CKAN config file
-ln -s "$VIRTUALENV_DIR/src/ckan" "$CKAN_CONFIG_DIR/who.ini"
+ln -s "$VIRTUALENV_DIR/src/ckan/who.ini" "$CKAN_CONFIG_DIR/who.ini"
 
 
 # SOLR setup
-if [ "SOLR_SETUP" == "auto" ]
+if [ "$SOLR_SETUP" == "auto" ]
 then
   replace_ini_entry --file /etc/default/jetty --search-raw "NO_START=" --replacement-raw "NO_START=0"
   replace_ini_entry --file /etc/default/jetty --search-raw "JETTY_HOST=" --replacement-raw "JETTY_HOST=127\.0\.0\.1"
-  replace_ini_entry --file /etc/default/jetty --search-raw "JETTY_PORT=" --replacement-raw "JETTY_PORT=8983"
+  replace_ini_entry --file /etc/default/jetty --search-raw "JETTY_PORT=" --replacement-raw "JETTY_PORT=$SOLR_PORT"
+  # bug on debian
+  rm /var/lib/jetty/webapps/solr
+  ln -s /usr/share/solr/web/ /var/lib/jetty/webapps/solr
   echo "testing jetty"
   service jetty restart
   curl http://localhost:8983/solr/
   input_two_choice "Does the output of the previous command looks ok?" y n
   if [ "$RET" == "n" ]
   then
-  echo "ERROR: Probably the JAVA_HOME setting in /etc/default/jetty is not set properly. "
+  echo "ERROR: Probably the JAVA_HOME setting in /etc/default/jetty is not set properly."
+  ehco "Or a symlink in /var/lib/jetty/webapps is broken"
   echo "Please open another terminal and fix this."
   echo "Currently the installation script doesn't support resuming."
   input_two_choice "Have you completed the instruction  above?" y n
@@ -120,11 +125,11 @@ then
     exit 1
     fi
   fi
-  mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-  ln -s $VIRTUALENV_DIR/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-  replace_all "solr_url = $SOLR_URL" '/' '\/'
-  replace_ini_entry --file "$CONFIG_PATH" --search-raw "solr_url" --replacement-raw "$RET"
 fi
+mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+ln -s $VIRTUALENV_DIR/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+replace_all "solr_url = $SOLR_URL" '/' '\/'
+replace_ini_entry --file "$CONFIG_PATH" --search-raw "solr_url" --replacement-raw "$RET"
 
 
 # export variables for template rendering engine  - mush (mustache-like)
@@ -132,26 +137,31 @@ export CKAN_CONFIG_DIR CKAN_INSTANCE_NAME CKAN_DOMAIN VIRTUALENV_DIR CKAN_CONFIG
 
 # apache ckan config
 a2dissite default
-replace_file_line_containing /etc/apache2/ports.conf "NameVirtualHost \*:80" "NameVirtualHost \*:8080"
-replace_file_line_containing /etc/apache2/ports.conf "Listen 80" "Listen 8080"
+replace_file_line_containing /etc/apache2/ports.conf "NameVirtualHost \*:80" "NameVirtualHost \*:8080"  && overwrite_save_file "/etc/apache2/ports.conf" "$RET"
+replace_file_line_containing /etc/apache2/ports.conf "Listen 80" "Listen 8080" && overwrite_save_file "/etc/apache2/ports.conf" "$RET"
 cat "$INIT_DIR/../templates/apache_ckan.conf" | mush > "/etc/apache2/sites-available/$CKAN_INSTANCE_NAME"
 cat "$INIT_DIR/../templates/apache_ckan.wsgi" | mush > "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
 chmod 644 "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
-chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/CKAN_INSTANCE_NAME.wsgi"
+chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
 a2ensite "$CKAN_INSTANCE_NAME"
 
 # nginx ckan config
-cp "$INIT_DIR/../templates/nginx.conf" "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME"
+cp "$INIT_DIR/../templates/nginx-ckan.conf" "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME"
+ln -s "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME" "/etc/nginx/sites-enabled/$CKAN_INSTANCE_NAME"
 
 # apache datapusher config
 echo "NameVirtualHost *:8800" >> /etc/apache2/ports.conf
 echo "Listen 8800" >> /etc/apache2/ports.conf
-cat "$INIT_DIR/../templates/apache_ckan_datapusher.conf" | mush > "/etc/apache2/sites-available/$CKAN_INSTANCE_NAME_datapusher"
-cat "$INIT_DIR/../templates/apache_ckan_datapusher.wsgi" | mush >  "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME_datapusher.wsgi"
-cp "$VIRTUALENV_DIR/src/datapusher/deployment/datapusher_settings.py" "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME_datapusher_settings.py"
-chmod 644 "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME_datapusher.wsgi"
-chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME_datapusher.wsgi"
-a2ensite "$CKAN_INSTANCE_NAME_datapusher"
+cat "$INIT_DIR/../templates/apache_ckan_datapusher.conf" | mush > "/etc/apache2/sites-available/${CKAN_INSTANCE_NAME}_datapusher"
+cat "$INIT_DIR/../templates/apache_ckan_datapusher.wsgi" | mush >  "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
+cp "$VIRTUALENV_DIR/src/datapusher/deployment/datapusher_settings.py" "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher_settings.py"
+DATAPUSHER_CONFIG_PATH="$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher_settings.py" # shortcut
+replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "NAME =" --replacement-raw "NAME = ${CKAN_INSTANCE_NAME}_datapusher"
+replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "FROM_EMAIL =" --replacement-raw "FROM_EMAIL = $SMTP_MAIL_FROM"
+replace_ini_entry --file "$DATAPUSHER_CONFIG_PATH" --search-raw "ADMINS =" --replacement-raw "ADMINS = ['$EMAIL_TO']"
+chmod 644 "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
+chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/${CKAN_INSTANCE_NAME}_datapusher.wsgi"
+a2ensite "${CKAN_INSTANCE_NAME}_datapusher"
 
 # setting datastore permission as per instruction on CKAN guide
 paster --plugin=ckan datastore set-permissions -c "$CONFIG_PATH" | sudo -u postgres psql --set ON_ERROR_STOP=1
