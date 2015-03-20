@@ -48,7 +48,7 @@ replace_ini_entry --file "$CKAN_ETC_DIR/default/development.ini" --search-raw "s
 replace_ini_entry --file "$CKAN_ETC_DIR/default/development.ini" --search-raw "ckan\.site_id =" --replacement-raw "ckan\.site_id = $CKAN_INSTANCE_NICKNAME"
 replace_ini_entry --file "$CKAN_ETC_DIR/default/development.ini" --search-raw "ckan\.plugins =" --replacement-raw "ckan\.plugins = stats text_view recline_view datastore datapusher obshtestvo_theme"
 
-# solr & jetty
+# solr & jetty - AWAITING INSTRUCTIONS
 #mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
 #ln -s $VIRTUALENV_DIR/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 #replace_ini_entry --file "$CKAN_ETC_DIR/default/development.ini" --search-raw "solr_url" --replacement-raw "solr_url = $SOLR_URL"
