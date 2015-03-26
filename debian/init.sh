@@ -17,7 +17,7 @@ if [ "$RET" == "quit" ]
 then
   exit 1
 fi
-apt-get install python-dev postgresql libpq-dev python-pip python-virtualenv \
+apt-get install python-dev postgresql-9.1 libpq-dev python-pip python-virtualenv \
 solr-jetty openjdk-6-jdk apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx-full postfix \
 build-essential libxslt1-dev libxml2-dev git
 
@@ -171,3 +171,4 @@ paster --plugin=ckan db init -c "$CONFIG_PATH"
 # apply changes
 service apache2 restart
 service nginx restart
+service jetty restart
