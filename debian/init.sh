@@ -46,7 +46,7 @@ pip install -e "git+$DATAPUSHER_REPO_TAG#egg=datapusher"
 
 # install dependencies
 pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
-(cd  $VIRTUALENV_DIR/default/src/datapusher && pip install -r requirements.txt)
+(cd  $VIRTUALENV_DIR/src/datapusher && pip install -r requirements.txt)
 
 # make sure you’re using the virtualenv’s copies of commands like paster rather than any system-wide installed copies
 deactivate
