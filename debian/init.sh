@@ -168,6 +168,10 @@ paster --plugin=ckan datastore set-permissions -c "$CONFIG_PATH" | sudo -u postg
 # database init
 paster --plugin=ckan db init -c "$CONFIG_PATH"
 
+# make sure all folders have the correct owner
+chown -R $OWNER_USER:$OWNER_GROUP $VIRTUALENV_DIR
+chown -R $OWNER_USER:$OWNER_GROUP $UPLOADS_DIR
+
 # apply changes
 service apache2 restart
 service nginx restart
