@@ -1,8 +1,9 @@
-This will setup CKAN 2.2 with:
+This will setup CKAN 2.3 with:
+
 - file storage enabled
 - datastore extension
 - datapusher extensions
-- obshtestvo theme extention
+- a custom theme extention
 
 Currently, the provided setup script is for **debian machines only**.
 
