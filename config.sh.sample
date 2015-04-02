@@ -16,10 +16,10 @@ LOCALES_ORDER="en pt_BR ja it cs_CZ ca es fr el sv sr sr@latin no sk fi ru de pl
 
 FAVICON_RELATIVE_URL=/images/icons/ckan.ico
 
-CKAN_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg.git@data.obshtestvo.bg
+CKAN_REPO_TAG=https://github.com/governmentbg/ckan.git@master
 
-CKAN_THEME_NAME=obshtestvo_theme
-CKAN_THEME_REPO_TAG=https://github.com/obshtestvo/data.obshtestvo.bg-theme.git@master
+CKAN_THEME_NAME=bulgarian_theme
+CKAN_THEME_REPO_TAG=https://github.com/governmentbg/ckan-bulgarian-theme.git@master
 
 POSTGRES_NEW_USER=ckan_default
 POSTGRES_NEW_READONLY_USER=datastore_default
@@ -31,10 +31,8 @@ SOLR_SETUP=manual
 SOLR_PORT=8983
 SOLR_URL=http://127.0.0.1:8983/solr
 
-DATAPUSHER_REPO_TAG=https://github.com/ckan/datapusher.git@master
+DATAPUSHER_REPO_TAG=https://github.com/governmentbg/ckan-datapusher.git@master
 DATAPUSHER_URL=http://0.0.0.0:8800/
-# Not implemented. Should we have separate venv for datapusher at all?
-#VIRTUALENV_DATAPUSHER_DIR=/usr/lib/ckan/default
 
 EMAIL_TO=something@maintainersdomain.com
 SMTP_MAIL_FROM=portal@portal.com
