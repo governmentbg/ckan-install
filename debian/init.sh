@@ -134,7 +134,7 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "solr_url" --replacement-ra
 
 
 # export variables for template rendering engine  - mush (mustache-like)
-export CKAN_CONFIG_DIR CKAN_INSTANCE_NAME CKAN_DOMAIN VIRTUALENV_DIR CKAN_CONFIG_FILENAME
+export CKAN_CONFIG_DIR CKAN_INSTANCE_NAME CKAN_DOMAIN VIRTUALENV_DIR CKAN_CONFIG_FILENAME MAX_RESOURCE_SIZE_IN_MEGABYTES
 
 # apache ckan config
 a2dissite default
