@@ -7,3 +7,4 @@ CKAN_TITLE="Портал за отворени данни"
 LOCALE=bg
 LOCALES_ORDER="bg en"
 FAVICON_RELATIVE_URL=/favicon.ico
+MAX_RESOURCE_SIZE_IN_MEGABYTES=1000

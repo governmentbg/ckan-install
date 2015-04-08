@@ -94,6 +94,7 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.starttls =" --replac
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.user =" --replacement-raw "smtp\.user = $SMTP_USER"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.password =" --replacement-raw "smtp\.password = $SMTP_PASS"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.mail_from =" --replacement-raw "smtp\.mail_from = $SMTP_MAIL_FROM"
+replace_ini_entry --file "$CONFIG_PATH" --search-raw "ckan\.max_resource_size =" --replacement-raw "ckan\.max_resource_size = $MAX_RESOURCE_SIZE_IN_MEGABYTES"
 
 # Repoze.who configuration file needs to be accessible in the same directory as your CKAN config file
 ln -s "$VIRTUALENV_DIR/src/ckan/who.ini" "$CKAN_CONFIG_DIR/who.ini"
