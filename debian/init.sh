@@ -116,7 +116,7 @@ then
   if [ "$RET" == "n" ]
   then
   echo "ERROR: Probably the JAVA_HOME setting in /etc/default/jetty is not set properly."
-  ehco "Or a symlink in /var/lib/jetty/webapps is broken"
+  echo "Or a symlink in /var/lib/jetty/webapps is broken"
   echo "Please open another terminal and fix this."
   echo "Currently the installation script doesn't support resuming."
   input_two_choice "Have you completed the instruction  above?" y n

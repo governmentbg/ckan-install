@@ -5,14 +5,16 @@ This will setup CKAN 2.3 with:
 - datapusher extensions
 - a custom theme extention
 
-Currently, the provided setup script is for **debian machines only**.
+Currently, the provided setup script is for **debian machines only**. Tested on Debian 7 (Wheezy).
 
 ## Usage
 
+1. Clone this repository in the OS temporary folder (usually `/tmp`). That guarantees all users can read it.
 1. Download git submodules: `git submodule update --init`
 1. Setup config. Start with template: `cp config.sh.sample config.sh` and modify the `config.sh` to your needs.
   Whatever password you define in the config for postgres users, make sure you type the same in the installation
-1. Run install as root: `bash debian/init.sh`
+1. Guarantee ability to execute scripts: `chmod -R 755 ./debian;chmod -R 755 ./bash-utilities/ `
+1. Run install as root: `bash debian/init.sh`. Keep an eye on the script. It prompts for user input at several times.
 
 After install you might want to:
 
