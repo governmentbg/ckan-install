@@ -54,7 +54,7 @@ deactivate
 
 
 ## database init
-su postgres postgres.sh
+su postgres $INIT_DIR/postgres.sh
 
 # alias path to config
 CONFIG_PATH="$CKAN_CONFIG_DIR/$CKAN_CONFIG_FILENAME"

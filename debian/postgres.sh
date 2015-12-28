@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-source ../config.sh
-source ../bash-utilities/utils.sh
+INIT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $INIT_DIR/../config.sh
+source $INIT_DIR/../bash-utilities/utils.sh
 
 psql -l
 input_two_choice "Are all databases UTF8? encoded" y n
