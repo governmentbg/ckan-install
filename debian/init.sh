@@ -147,7 +147,7 @@ chown $OWNER_USER:$OWNER_GROUP "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
 a2ensite "$CKAN_INSTANCE_NAME"
 
 # nginx ckan config
-cat "$INIT_DIR/../templates/nginx-ckan.conf" | mush > "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME"
+cat "$INIT_DIR/../templates/nginx_ckan.conf" | mush > "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME"
 ln -s "/etc/nginx/sites-available/$CKAN_INSTANCE_NAME" "/etc/nginx/sites-enabled/$CKAN_INSTANCE_NAME"
 
 # apache datapusher config
