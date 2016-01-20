@@ -19,7 +19,7 @@ then
 fi
 apt-get install python-dev postgresql-9.1 libpq-dev python-pip python-virtualenv \
 solr-jetty openjdk-6-jdk apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx-full postfix \
-build-essential libxslt1-dev libxml2-dev git
+build-essential libxslt1-dev libxml2-dev git pwgen
 
 ## setup directories
 ## dependencies dir
