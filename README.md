@@ -22,6 +22,7 @@ After install you might want to:
 1. Disable user registrations by running `bash disable_user_registrations.sh`
 1. Create users by creating a file and a single user per line in the format: `Firstname Lastname;email.address@example.com` and running `bash batch_user_create.sh your/user/file.txt`
 1. [Expore different guides](https://github.com/governmentbg/opendata/tree/master/guides)
+1. If something goes wrong (for example, server error 500), read the Apache error logs - `$ tail -f /var/log/apache2/$CKAN_INSTANCE_NAME.error.log`
 
 
 ## Further notes
