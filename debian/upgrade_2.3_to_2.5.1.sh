@@ -73,6 +73,11 @@ export CKAN_CONFIG_DIR CKAN_INSTANCE_NAME CKAN_DOMAIN VIRTUALENV_DIR CKAN_CONFIG
 
 chmod 644 "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
 
+# Stop services to release database connections
+service apache2 stop
+service nginx stop
+service jetty stop
+
 # setting datastore permission as per instruction on CKAN guide
 paster --plugin=ckan db upgrade -c "$CONFIG_PATH"
 paster --plugin=ckan search-index rebuild -r -c "$CONFIG_PATH"
@@ -82,6 +87,6 @@ chown -R $OWNER_USER:$OWNER_GROUP $VIRTUALENV_DIR
 chown -R $OWNER_USER:$OWNER_GROUP $UPLOADS_DIR
 
 # apply changes
-service apache2 restart
-service nginx restart
-service jetty restart
+service apache2 start
+service nginx start
+service jetty start
