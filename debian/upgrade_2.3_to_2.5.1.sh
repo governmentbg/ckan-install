@@ -7,16 +7,57 @@ source $INIT_DIR/../mush/mush.sh
 # activate virtualenv
 . "$VIRTUALENV_DIR/bin/activate"
 
+
+# Backup old version
+CURRENT_BACKUP_DIR="$CKAN_BACKUP_PATH/$(date '+%Y%m%d')"
+mkdir -p $CURRENT_BACKUP_DIR
+cd $CURRENT_BACKUP_DIR
+
+# Database backup
+PG_OPENDATA_BACKUP_NAME="backup_opendata_$(date '+%Y%m%d').dump"
+PG_OPENDATA_DATASTORE_BACKUP_NAME="backup_opendata_datastore_$(date '+%Y%m%d').dump"
+
+sudo -u postgres pg_dump opendata > $PG_OPENDATA_BACKUP_NAME
+sudo -u postgres pg_dump opendata_datastore > $PG_OPENDATA_DATASTORE_BACKUP_NAME
+paster --plugin=ckan db dump --config=/var/www/ckan/config/production.ini opendata_`date '+%Y%m%d_%H%M%S'`.pg_dump
+
+cp -r $CKAN_CONFIG_DIR $CURRENT_BACKUP_DIR
+cp -r $VIRTUALENV_DIR $CURRENT_BACKUP_DIR
+
+cd $CURRENT_BACKUP_DIR
+mkdir nginx
+cd nginx
+cp /etc/nginx/nginx.conf .
+cp /etc/nginx/sites-available/opendatabulgaria .
+
+cd $CURRENT_BACKUP_DIR
+mkdir apache2
+cd apache2
+cp /etc/apache2/sites-available/opendatabulgaria .
+cp /etc/apache2/sites-available/opendatabulgaria_datapusher .
+
+
 # Remove current version of ckan
 pip uninstall ckan
 rm -rf "$VIRTUALENV_DIR/src/ckan/"
+
+deactivate
+. "$VIRTUALENV_DIR/bin/activate"
+pip install --upgrade setuptools
+pip install --upgrade pip
+deactivate
+. "$VIRTUALENV_DIR/bin/activate"
 
 # install ckan, data.government.bg theme, and datapusher to virtualenv
 pip install -e "git+$CKAN_REPO_TAG#egg=ckan"
 
 # install dependencies
-#pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
+# pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
+pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 pip install --upgrade -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
+
+pip uninstall html5lib
+pip install html5lib==0.9999999
 
 # make sure you’re using the virtualenv’s copies of commands like paster rather than any system-wide installed copies
 deactivate
@@ -75,8 +116,9 @@ chmod 644 "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
 
 # Stop services to release database connections
 service apache2 stop
-service nginx stop
-service jetty stop
+
+deactivate
+. "$VIRTUALENV_DIR/bin/activate"
 
 # setting datastore permission as per instruction on CKAN guide
 paster --plugin=ckan db upgrade -c "$CONFIG_PATH"
@@ -87,6 +129,6 @@ chown -R $OWNER_USER:$OWNER_GROUP $VIRTUALENV_DIR
 chown -R $OWNER_USER:$OWNER_GROUP $UPLOADS_DIR
 
 # apply changes
-service apache2 start
-service nginx start
-service jetty start
+service apache2 restart
+service nginx restart
+service jetty restart
