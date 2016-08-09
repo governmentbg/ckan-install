@@ -4,9 +4,30 @@ source $INIT_DIR/../config.sh
 source $INIT_DIR/../bash-utilities/utils.sh
 source $INIT_DIR/../mush/mush.sh
 
+OPENDATA_CONFIG_LINK=/etc/nginx/sites-enabled/opendatabulgaria
+OPENDATA_CONFIG=/etc/nginx/sites-available/opendatabulgaria
+
+# Prepare a maintenance page
+MAINTENANCE_WEBROOT_DIR=`dirname $VIRTUALENV_DIR`
+MAINTENANCE_WEBROOT_DIR=`dirname $MAINTENANCE_WEBROOT_DIR`/maintenance
+mkdir -p "$MAINTENANCE_WEBROOT_DIR"
+cp -f "$INIT_DIR/maintenance/index.html" "$MAINTENANCE_WEBROOT_DIR"
+
+if [ -L "$OPENDATA_CONFIG_LINK" ]; then
+	cp -f "$INIT_DIR/maintenance/maintenance.conf" /etc/nginx/sites-enabled/
+	rm -f "$OPENDATA_CONFIG_LINK"
+	echo "Reloading Nginx to enable maintenance mode..."
+	service nginx reload
+	MAINTENANCE_ENABLED="yes"
+else
+	echo "WARNING: Maintenance mode not properly activated (can't disable the current site's config, $OPENDATA_CONFIG_LINK is not an existing symlink)"
+	echo "Stopping Nginx..."
+	service nginx stop
+	MAINTENANCE_ENABLED="no"
+fi
+
 
 service apache2 stop
-service nginx stop
 
 # activate virtualenv
 . "$VIRTUALENV_DIR/bin/activate"
@@ -131,5 +152,16 @@ chown -R $OWNER_USER:$OWNER_GROUP $UPLOADS_DIR
 
 # apply changes
 service apache2 restart
-service nginx restart
 service jetty restart
+
+
+# Disable maintenance mode if it was enabled
+if [ "$MAINTENANCE_ENABLED" = "yes" ]; then
+	rm -f /etc/nginx/sites-enabled/maintenance.conf
+	ln -s "$OPENDATA_CONFIG" "$OPENDATA_CONFIG_LINK"
+	echo "Reloading Nginx to disable maintenance mode..."
+	service nginx reload
+else
+	echo "Maintenance mode was not enabled, restaring Nginx..."
+	service nginx restart
+fi
