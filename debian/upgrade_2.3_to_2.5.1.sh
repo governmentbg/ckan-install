@@ -4,6 +4,10 @@ source $INIT_DIR/../config.sh
 source $INIT_DIR/../bash-utilities/utils.sh
 source $INIT_DIR/../mush/mush.sh
 
+
+service apache2 stop
+service nginx stop
+
 # activate virtualenv
 . "$VIRTUALENV_DIR/bin/activate"
 
@@ -113,9 +117,6 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "solr_url" --replacement-ra
 export CKAN_CONFIG_DIR CKAN_INSTANCE_NAME CKAN_DOMAIN VIRTUALENV_DIR CKAN_CONFIG_FILENAME MAX_RESOURCE_SIZE_IN_MEGABYTES
 
 chmod 644 "$CKAN_CONFIG_DIR/$CKAN_INSTANCE_NAME.wsgi"
-
-# Stop services to release database connections
-service apache2 stop
 
 deactivate
 . "$VIRTUALENV_DIR/bin/activate"
