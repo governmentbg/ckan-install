@@ -14,7 +14,7 @@ mkdir -p "$MAINTENANCE_WEBROOT_DIR"
 cp -f "$INIT_DIR/maintenance/index.html" "$MAINTENANCE_WEBROOT_DIR"
 
 if [ -L "$OPENDATA_CONFIG_LINK" ]; then
-	cp -f "$INIT_DIR/maintenance/maintenance.conf" /etc/nginx/sites-enabled/
+	cat "$INIT_DIR/maintenance/maintenance.conf" | mush > /etc/nginx/sites-enabled/maintenance.conf
 	rm -f "$OPENDATA_CONFIG_LINK"
 	echo "Reloading Nginx to enable maintenance mode..."
 	service nginx reload
