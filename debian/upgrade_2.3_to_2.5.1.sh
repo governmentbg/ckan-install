@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+# A script for upgrading our custom CKAN install from 2.3.x to 2.5.1
+#
+# =======
+# UPGRADE
+# =======
+#
+# 1. Clone this repo somewhere as root
+# 2. Make sure you have the same config.sh as used by the installation. If not,
+#    copy config.sh.sample to config.sh and edit it accordingly to match your
+#    current CKAN installation.
+# 3. Add the following to config.sh:
+#
+#    CKAN_BACKUP_PATH=/var/www/ckan/backup
+#
+#    (or set it to a path you prefer.)
+# 4. Set CKAN_REPO_TAG in config.sh to the appropriate value to the desired
+#    CKAN version. For example:
+#
+#    CKAN_REPO_TAG=https://github.com/ckan/ckan.git@ckan-2.5.1
+#
+# ==================
+# ROLLBACK / RESTORE
+# ==================
+#
+# Run the following:
+#
+#   ./debian/rollback_after_upgrade.sh
+
 set -e
 
 INIT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
