@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -e
+
 INIT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $INIT_DIR/../config.sh
 source $INIT_DIR/../bash-utilities/utils.sh
