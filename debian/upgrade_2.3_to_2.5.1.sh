@@ -13,7 +13,7 @@ service nginx stop
 
 
 # Backup old version
-CURRENT_BACKUP_DIR="$CKAN_BACKUP_PATH/$(date '+%Y%m%d')"
+CURRENT_BACKUP_DIR="$CKAN_BACKUP_PATH/$(date '+%Y%m%d_%H%M%S')"
 mkdir -p $CURRENT_BACKUP_DIR
 cd $CURRENT_BACKUP_DIR
 
