@@ -97,6 +97,10 @@ cp /etc/apache2/sites-available/opendatabulgaria_datapusher .
 # Remove current version of ckan
 pip uninstall ckan
 rm -rf "$VIRTUALENV_DIR/src/ckan/"
+pip uninstall datapusher
+rm -rf "$VIRTUALENV_DIR/src/datapusher/"
+pip uninstall ckanext-bulgarian-theme
+rm -rf "$VIRTUALENV_DIR/src/bulgarian-theme"
 
 deactivate
 . "$VIRTUALENV_DIR/bin/activate"
@@ -107,11 +111,14 @@ deactivate
 
 # install ckan, data.government.bg theme, and datapusher to virtualenv
 pip install -e "git+$CKAN_REPO_TAG#egg=ckan"
+pip install -e "git+$CKAN_THEME_REPO_TAG#egg=$CKAN_THEME_NAME"
+pip install -e "git+$DATAPUSHER_REPO_TAG#egg=datapusher"
 
 # install dependencies
 # pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 pip install --upgrade -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
+(cd  $VIRTUALENV_DIR/src/datapusher && pip install --upgrade -r requirements.txt)
 
 if `pip show html5lib`
 then
