@@ -76,7 +76,7 @@ PG_OPENDATA_DATASTORE_BACKUP_NAME="backup_opendata_datastore_$(date '+%Y%m%d').d
 
 sudo -u postgres pg_dump opendata > $PG_OPENDATA_BACKUP_NAME
 sudo -u postgres pg_dump opendata_datastore > $PG_OPENDATA_DATASTORE_BACKUP_NAME
-#paster --plugin=ckan db dump --config=/var/www/ckan/config/production.ini opendata_`date '+%Y%m%d_%H%M%S'`.pg_dump
+paster --plugin=ckan db dump --config=/var/www/ckan/config/production.ini opendata_`date '+%Y%m%d_%H%M%S'`.pg_dump
 
 cp -r $CKAN_CONFIG_DIR $CURRENT_BACKUP_DIR
 cp -r $VIRTUALENV_DIR $CURRENT_BACKUP_DIR
