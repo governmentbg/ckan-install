@@ -115,10 +115,8 @@ pip install -e "git+$CKAN_THEME_REPO_TAG#egg=$CKAN_THEME_NAME"
 pip install -e "git+$DATAPUSHER_REPO_TAG#egg=datapusher"
 
 # install dependencies
-# pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
-pip install --upgrade -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
-(cd  $VIRTUALENV_DIR/src/datapusher && pip install --upgrade -r requirements.txt)
+(cd  $VIRTUALENV_DIR/src/datapusher && pip install -r requirements.txt)
 
 # make sure you’re using the virtualenv’s copies of commands like paster rather than any system-wide installed copies
 deactivate
@@ -163,6 +161,7 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.user =" --replacemen
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.password =" --replacement-raw "smtp\.password = $SMTP_PASS"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.mail_from =" --replacement-raw "smtp\.mail_from = $SMTP_MAIL_FROM"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "ckan\.max_resource_size =" --replacement-raw "ckan\.max_resource_size = $MAX_RESOURCE_SIZE_IN_MEGABYTES"
+replace_ini_entry --file "$CONFIG_PATH" --search-raw "ckan\.auth\.create_user_via_web =" --replacement-raw "ckan\.auth\.create_user_via_web = $CREATE_USER_VIA_WEB"
 
 mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
 ln -s $VIRTUALENV_DIR/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
