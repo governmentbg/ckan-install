@@ -157,6 +157,12 @@ replace_ini_entry --file "$CONFIG_PATH" --search-raw "smtp\.mail_from =" --repla
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "ckan\.max_resource_size =" --replacement-raw "ckan\.max_resource_size = $MAX_RESOURCE_SIZE_IN_MEGABYTES"
 replace_ini_entry --file "$CONFIG_PATH" --search-raw "ckan\.auth\.create_user_via_web =" --replacement-raw "ckan\.auth\.create_user_via_web = $CREATE_USER_VIA_WEB"
 
+echo ""                                                           >> "$CONFIG_PATH"
+echo "# http://docs.sqlalchemy.org/en/rel_0_9/core/pooling.html"  >> "$CONFIG_PATH"
+echo "ckan.datastore.sqlalchemy.pool_size = 20"                   >> "$CONFIG_PATH"
+echo "ckan.datastore.sqlalchemy.max_overflow = 30"                >> "$CONFIG_PATH"
+
+
 mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
 ln -s $VIRTUALENV_DIR/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 replace_all "solr_url = $SOLR_URL" '/' '\/'
