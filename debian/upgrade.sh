@@ -120,13 +120,6 @@ pip install -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 pip install --upgrade -r "$VIRTUALENV_DIR/src/ckan/requirements.txt"
 (cd  $VIRTUALENV_DIR/src/datapusher && pip install --upgrade -r requirements.txt)
 
-if `pip show html5lib`
-then
-    pip uninstall html5lib
-fi
-
-pip install html5lib==0.9999999
-
 # make sure you’re using the virtualenv’s copies of commands like paster rather than any system-wide installed copies
 deactivate
 . "$VIRTUALENV_DIR/bin/activate"
