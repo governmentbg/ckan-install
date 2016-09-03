@@ -6,6 +6,7 @@ UPLOADS_DIR=/var/lib/ckan/default
 OWNER_USER=www-data
 OWNER_GROUP=www-data
 MAX_RESOURCE_SIZE_IN_MEGABYTES=200
+CREATE_USER_VIA_WEB=false
 
 CKAN_INSTANCE_NAME=opendatabulgaria # only latin lowercase + underscores allowed
 CKAN_DOMAIN=opendata.government.bg
