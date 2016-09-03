@@ -41,23 +41,17 @@ OPENDATA_CONFIG=/etc/nginx/sites-available/opendatabulgaria
 # Prepare a maintenance page
 MAINTENANCE_WEBROOT_DIR=`dirname $VIRTUALENV_DIR`
 MAINTENANCE_WEBROOT_DIR=`dirname $MAINTENANCE_WEBROOT_DIR`/maintenance
+MAINTENANCE_CONFIG='/etc/nginx/sites-enabled/maintenance.conf'
 mkdir -p "$MAINTENANCE_WEBROOT_DIR"
 cp -f "$INIT_DIR/maintenance/index.html" "$MAINTENANCE_WEBROOT_DIR"
 
-if [ -L "$OPENDATA_CONFIG_LINK" ]; then
-	export MAINTENANCE_WEBROOT_DIR CKAN_DOMAIN
-	cat "$INIT_DIR/maintenance/maintenance.conf" | mush > /etc/nginx/sites-enabled/maintenance.conf
-	rm -f "$OPENDATA_CONFIG_LINK"
-	echo "Reloading Nginx to enable maintenance mode..."
-	service nginx reload
-	MAINTENANCE_ENABLED="yes"
-else
-	echo "WARNING: Maintenance mode not properly activated (can't disable the current site's config, $OPENDATA_CONFIG_LINK is not an existing symlink)"
-	echo "Stopping Nginx..."
-	service nginx stop
-	MAINTENANCE_ENABLED="no"
-fi
+rm -fv "$OPENDATA_CONFIG_LINK"
 
+echo 'Enabling maintenance mode...'
+export MAINTENANCE_WEBROOT_DIR CKAN_DOMAIN
+cat "$INIT_DIR/maintenance/maintenance.conf" | mush > $MAINTENANCE_CONFIG
+echo "Reloading Nginx to enable maintenance mode..."
+service nginx restart
 
 service apache2 stop
 
@@ -191,12 +185,7 @@ service jetty restart
 
 
 # Disable maintenance mode if it was enabled
-if [ "$MAINTENANCE_ENABLED" = "yes" ]; then
-	rm -f /etc/nginx/sites-enabled/maintenance.conf
-	ln -s "$OPENDATA_CONFIG" "$OPENDATA_CONFIG_LINK"
-	echo "Reloading Nginx to disable maintenance mode..."
-	service nginx reload
-else
-	echo "Maintenance mode was not enabled, restaring Nginx..."
-	service nginx restart
-fi
+rm -fv $MAINTENANCE_CONFIG
+ln -s "$OPENDATA_CONFIG" "$OPENDATA_CONFIG_LINK"
+echo "Reloading Nginx to disable maintenance mode..."
+service nginx restart
