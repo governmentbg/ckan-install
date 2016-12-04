@@ -29,4 +29,4 @@ fi
 
 cd $BACKUP_DIR_TO_SYNC
 
-rsync -a --delete-after * $BACKUP_REMOTE_SYNC_LOCATION
+rsync -av --delete-after * $BACKUP_REMOTE_SYNC_LOCATION
