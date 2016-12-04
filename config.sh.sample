@@ -43,3 +43,9 @@ SMTP_HOST=smtphostname.com
 SMTP_TLS=True
 SMTP_USER=smtpusername
 SMTP_PASS=secretpasswordforsmtp
+
+BACKUP_DIR=/data/backups/ckan
+BACKUP_PGDBNAMES="ckan_default datastore_default"
+BACKUP_PATHS="$CKAN_CONFIG_DIR $UPLOADS_DIR $VIRTUALENV_DIR /etc /var/www/maintenance"
+BACKUP_DIR_TO_SYNC=/data/backups
+BACKUP_REMOTE_SYNC_LOCATION=user@remote-server-host:/remote/backups/path
