@@ -48,4 +48,5 @@ BACKUP_DIR=/data/backups/ckan
 BACKUP_PGDBNAMES="ckan_default datastore_default"
 BACKUP_PATHS="$CKAN_CONFIG_DIR $UPLOADS_DIR $VIRTUALENV_DIR /etc /var/www/maintenance"
 BACKUP_DIR_TO_SYNC=/data/backups
+BACKUP_DAYS_TO_KEEP=14
 BACKUP_REMOTE_SYNC_LOCATION=user@remote-server-host:/remote/backups/path

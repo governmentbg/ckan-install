@@ -21,6 +21,12 @@ for i in $BACKUP_PATHS; do
 	tar cf - $i 2>/dev/null | nice pbzip2 -c > $dst/$oname.tar.bz2
 done
 
+if [ ! -z "$BACKUP_DAYS_TO_KEEP" ]; then
+	# Delete all backups older than $BACKUP_DAYS_TO_KEEP except
+	# backups made on the 1st of each month.
+	find $BACKUP_DIR -mindepth 1 -maxdepth 1 -type d -mtime +$BACKUP_DAYS_TO_KEEP | grep -v '01$' | xargs rm -rfv
+fi
+
 cd $BACKUP_DIR_TO_SYNC
 
-rsync -a * $BACKUP_REMOTE_SYNC_LOCATION
+rsync -a --delete-after * $BACKUP_REMOTE_SYNC_LOCATION
