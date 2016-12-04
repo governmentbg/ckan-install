@@ -18,7 +18,7 @@ done
 
 for i in $BACKUP_PATHS; do
 	oname=`echo $i | sed 's%/%_%g'`
-	tar cf - $i 2>/dev/null | pbzip2 -c > $dst/$oname.tar.bz2
+	tar cf - $i 2>/dev/null | nice pbzip2 -c > $dst/$oname.tar.bz2
 done
 
 cd $BACKUP_DIR_TO_SYNC
