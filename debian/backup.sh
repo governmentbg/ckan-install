@@ -23,5 +23,4 @@ done
 
 cd $BACKUP_DIR_TO_SYNC
 
-rsync -a * backup-opendata@koi.obshtestvo.bg:
-
+rsync -a * $BACKUP_REMOTE_SYNC_LOCATION
